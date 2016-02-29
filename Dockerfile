@@ -39,6 +39,7 @@ COPY *.xsl /tmp/
 # container is run for the first time.
 ###############################################################################
 COPY wso2am-entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 #------------------------------------------------------------------------------
 # Ports exposed by console, publisher, store, runtime token, and runtime gateway.
