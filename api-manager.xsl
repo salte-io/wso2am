@@ -22,4 +22,11 @@
       <xsl:copy-of select="." />
       <ThriftServerHost><xsl:value-of select="$thriftserver"/></ThriftServerHost>
    </xsl:template>
+
+   <xsl:template match="APIStore">
+      <xsl:copy>
+         <GroupingExtractor>org.wso2.carbon.apimgt.impl.DefaultGroupIDExtractorImpl</GroupingExtractor>
+         <xsl:apply-templates />
+      </xsl:copy>
+   </xsl:template>
 </xsl:stylesheet>

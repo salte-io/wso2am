@@ -22,4 +22,14 @@
       <xsl:apply-templates />
       <parameter name="HostnameVerifier">DefaultAndLocalhost</parameter>
    </xsl:template>
+
+   <xsl:template match="messageFormatter[@contentType='application/json']">
+      <messageFormatter contentType="application/json" class="org.apache.synapse.commons.json.JsonStreamFormatter" />
+      <messageFormatter contentType="application/hal+json" class="org.apache.synapse.commons.json.JsonStreamFormatter" />
+   </xsl:template>
+
+   <xsl:template match="messageBuilder[@contentType='application/json']">
+      <messageBuilder contentType="application/json" class="org.apache.synapse.commons.json.JsonStreamBuilder" />
+      <messageBuilder contentType="application/hal+json" class="org.apache.synapse.commons.json.JsonStreamBuilder" />
+   </xsl:template>
 </xsl:stylesheet>

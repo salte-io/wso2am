@@ -16,4 +16,16 @@
    <xsl:template match="Password">
       <xsl:copy><xsl:value-of select="$password"/></xsl:copy>
    </xsl:template>
+
+   <xsl:template match="UserStoreManager[@class='org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager']/Property[@name='UsernameJavaRegEx']">
+      <xsl:copy><xsl:copy-of select="@*" />^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$</xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="UserStoreManager[@class='org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager']/Property[@name='IsEmailUserName']">
+      <xsl:copy><xsl:copy-of select="@*" />true</xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="AdminUser/UserName">
+      <xsl:copy>admin@wso2.com</xsl:copy>
+   </xsl:template>
 </xsl:stylesheet>

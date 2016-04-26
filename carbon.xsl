@@ -12,7 +12,10 @@
    </xsl:template>
 
    <xsl:template match="carbon:ServerKey">
-      <xsl:copy-of select="." />
+      <!--xsl:copy-of select="." /-->
+      <xsl:copy>
+         <xsl:apply-templates />
+      </xsl:copy>
       <HostName><xsl:value-of select="$hostname"/></HostName>
       <MgtHostName><xsl:value-of select="$hostname"/></MgtHostName>
    </xsl:template>
@@ -22,11 +25,21 @@
    </xsl:template>
 
    <xsl:template match="carbon:KeyStore/carbon:Location">
-      <!--xsl:copy>${carbon.home}<xsl:value-of select="$keystore"/></xsl:copy-->
       <xsl:copy><xsl:value-of select="$keystore"/></xsl:copy>
    </xsl:template>
 
    <xsl:template match="carbon:KeyStore/carbon:KeyAlias">
       <xsl:copy><xsl:value-of select="$alias"/></xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="carbon:HideAdminServiceWSDLs">
+      <xsl:copy>false</xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="carbon:Security">
+      <EnableEmailUserName>true</EnableEmailUserName>
+      <xsl:copy>
+         <xsl:apply-templates />
+      </xsl:copy>
    </xsl:template>
 </xsl:stylesheet>
