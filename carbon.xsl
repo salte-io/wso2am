@@ -3,6 +3,7 @@
    <xsl:param name="password" as="xs:string" required="yes"/>
    <xsl:param name="keystore" as="xs:string" required="yes"/>
    <xsl:param name="alias" as="xs:string" required="yes"/>
+   <xsl:param name="offset" as="xs:integer" required="yes"/>
 
    <xsl:output method="xml" indent="yes" />
    <xsl:template match="node()|@*">
@@ -41,5 +42,9 @@
       <xsl:copy>
          <xsl:apply-templates />
       </xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="carbon:Offset">
+      <xsl:copy><xsl:value-of select="$offset"/></xsl:copy>
    </xsl:template>
 </xsl:stylesheet>

@@ -29,4 +29,13 @@
          <xsl:apply-templates />
       </xsl:copy>
    </xsl:template>
+
+   <xsl:template match="APIConsumerAuthentication/SecurityContextHeader">
+      <xsl:copy-of select="." />
+      <ClaimsRetrieverImplClass>org.wso2.carbon.apimgt.impl.token.DefaultClaimsRetriever</ClaimsRetrieverImplClass>
+      <ConsumerDialectURI>http://wso2.org/claims</ConsumerDialectURI>
+      <SignatureAlgorithm>SHA256withRSA</SignatureAlgorithm>
+      <EnableTokenGeneration>true</EnableTokenGeneration>
+      <RemoveOAuthHeadersFromOutMessage>true</RemoveOAuthHeadersFromOutMessage>
+   </xsl:template>
 </xsl:stylesheet>

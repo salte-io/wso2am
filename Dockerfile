@@ -47,6 +47,6 @@ RUN chmod +x /entrypoint.sh
 #     they can be kept internal to the container and...
 #     we will NEVER host multiple WSO2 products within a single container. ***
 #------------------------------------------------------------------------------
-EXPOSE 9443 9763 8243 8280
+#EXPOSE 9443 9763 8243 8280
 
 ENTRYPOINT ["/entrypoint.sh"]
