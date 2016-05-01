@@ -43,7 +43,10 @@ RUN chmod +x /entrypoint.sh
 
 #------------------------------------------------------------------------------
 # Ports exposed by console, publisher, store, runtime token, and runtime gateway.
+# *** These may be used consistently because...
+#     they can be kept internal to the container and...
+#     we will NEVER host multiple WSO2 products within a single container. ***
 #------------------------------------------------------------------------------
-EXPOSE 9443 9763 8243 8280
+#EXPOSE 9443 9763 8243 8280
 
 ENTRYPOINT ["/entrypoint.sh"]

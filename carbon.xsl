@@ -3,6 +3,7 @@
    <xsl:param name="password" as="xs:string" required="yes"/>
    <xsl:param name="keystore" as="xs:string" required="yes"/>
    <xsl:param name="alias" as="xs:string" required="yes"/>
+   <xsl:param name="offset" as="xs:integer" required="yes"/>
 
    <xsl:output method="xml" indent="yes" />
    <xsl:template match="node()|@*">
@@ -12,7 +13,10 @@
    </xsl:template>
 
    <xsl:template match="carbon:ServerKey">
-      <xsl:copy-of select="." />
+      <!--xsl:copy-of select="." /-->
+      <xsl:copy>
+         <xsl:apply-templates />
+      </xsl:copy>
       <HostName><xsl:value-of select="$hostname"/></HostName>
       <MgtHostName><xsl:value-of select="$hostname"/></MgtHostName>
    </xsl:template>
@@ -22,11 +26,25 @@
    </xsl:template>
 
    <xsl:template match="carbon:KeyStore/carbon:Location">
-      <!--xsl:copy>${carbon.home}<xsl:value-of select="$keystore"/></xsl:copy-->
       <xsl:copy><xsl:value-of select="$keystore"/></xsl:copy>
    </xsl:template>
 
    <xsl:template match="carbon:KeyStore/carbon:KeyAlias">
       <xsl:copy><xsl:value-of select="$alias"/></xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="carbon:HideAdminServiceWSDLs">
+      <xsl:copy>false</xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="carbon:Security">
+      <EnableEmailUserName>true</EnableEmailUserName>
+      <xsl:copy>
+         <xsl:apply-templates />
+      </xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="carbon:Offset">
+      <xsl:copy><xsl:value-of select="$offset"/></xsl:copy>
    </xsl:template>
 </xsl:stylesheet>
