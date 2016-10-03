@@ -12,7 +12,7 @@ FROM java:7-jdk
 # 8) Removes compressed files.
 # 9) Creates a link to tie WSO2 log output to the Docker log file.
 ###############################################################################
-RUN wget -P /opt http://192.168.1.50:8091/repository/wso2/api/2.0.0/platform.zip && \
+RUN wget --no-check-certificate -P /opt https://api.salte.io:8443/repository/wso2/api/2.0.0/platform.zip && \
     wget -P /tmp http://dev.mysql.com/Downloads/Connector-J/mysql-connector-java-5.1.38.zip && \
     apt-get update && \
     apt-get install -y zip && \
