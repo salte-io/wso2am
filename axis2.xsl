@@ -2,7 +2,7 @@
    <xsl:param name="password" as="xs:string" required="yes"/>
    <xsl:param name="keystore" as="xs:string" required="yes"/>
    
-   <xsl:output method="xml" indent="yes" />
+   <xsl:output method="xml" encoding="ISO-8859-1" omit-xml-declaration="no" indent="yes" />
    <xsl:template match="node()|@*">
       <xsl:copy>
          <xsl:apply-templates select="node()|@*" />
