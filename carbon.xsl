@@ -5,46 +5,57 @@
    <xsl:param name="alias" as="xs:string" required="yes"/>
    <xsl:param name="offset" as="xs:integer" required="yes"/>
 
-   <xsl:output method="xml" indent="yes" />
+   <xsl:output method="xml" encoding="ISO-8859-1" omit-xml-declaration="no" indent="yes" />
    <xsl:template match="node()|@*">
       <xsl:copy>
          <xsl:apply-templates select="node()|@*" />
       </xsl:copy>
    </xsl:template>
 
-   <xsl:template match="carbon:ServerKey">
-      <!--xsl:copy-of select="." /-->
+   <xsl:template match="carbon:Server">
       <xsl:copy>
          <xsl:apply-templates />
+         <xsl:if test="not(carbon:HostName)">
+            <HostName><xsl:value-of select="$hostname"/></HostName>
+         </xsl:if>
+         <xsl:if test="not(carbon:MgtHostName)">
+            <MgtHostName><xsl:value-of select="$hostname"/></MgtHostName>
+         </xsl:if>
+         <xsl:if test="not(carbon:EnableEmailUserName)">
+            <EnableEmailUserName>true</EnableEmailUserName>
+         </xsl:if>
       </xsl:copy>
-      <HostName><xsl:value-of select="$hostname"/></HostName>
-      <MgtHostName><xsl:value-of select="$hostname"/></MgtHostName>
+   </xsl:template>
+
+   <xsl:template match="carbon:Server/carbon:HostName">
+      <xsl:copy><xsl:value-of select="$hostname"/></xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="carbon:Server/carbon:MgtHostName">
+      <xsl:copy><xsl:value-of select="$hostname"/></xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="carbon:Server/carbon:EnableEmailUserName">
+      <xsl:copy>true</xsl:copy>
    </xsl:template>
 
    <xsl:template match="carbon:Password|carbon:KeyPassword">
       <xsl:copy><xsl:value-of select="$password"/></xsl:copy>
    </xsl:template>
 
-   <xsl:template match="carbon:KeyStore/carbon:Location">
+   <xsl:template match="carbon:Server/carbon:Security/carbon:KeyStore/carbon:Location">
       <xsl:copy><xsl:value-of select="$keystore"/></xsl:copy>
    </xsl:template>
 
-   <xsl:template match="carbon:KeyStore/carbon:KeyAlias">
+   <xsl:template match="carbon:Server/carbon:Security/carbon:KeyStore/carbon:KeyAlias">
       <xsl:copy><xsl:value-of select="$alias"/></xsl:copy>
    </xsl:template>
 
-   <xsl:template match="carbon:HideAdminServiceWSDLs">
+   <xsl:template match="carbon:Server/carbon:Axis2Config/carbon:HideAdminServiceWSDLs">
       <xsl:copy>false</xsl:copy>
    </xsl:template>
 
-   <xsl:template match="carbon:Security">
-      <EnableEmailUserName>true</EnableEmailUserName>
-      <xsl:copy>
-         <xsl:apply-templates />
-      </xsl:copy>
-   </xsl:template>
-
-   <xsl:template match="carbon:Offset">
+   <xsl:template match="carbon:Server/carbon:Ports/carbon:Offset">
       <xsl:copy><xsl:value-of select="$offset"/></xsl:copy>
    </xsl:template>
 </xsl:stylesheet>

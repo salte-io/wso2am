@@ -2,7 +2,7 @@
    <xsl:param name="userds" as="xs:string" required="yes"/>
    <xsl:param name="password" as="xs:string" required="yes"/>
 
-   <xsl:output method="xml" indent="yes" />
+   <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" />
    <xsl:template match="node()|@*">
       <xsl:copy>
          <xsl:apply-templates select="node()|@*" />

@@ -11,7 +11,7 @@
 
    <xsl:variable name="driver" select="'com.mysql.jdbc.Driver'" />
    
-   <xsl:output method="xml" indent="yes" />
+   <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" />
    <xsl:template match="node()|@*">
       <xsl:copy>
          <xsl:apply-templates select="node()|@*" />
@@ -54,7 +54,7 @@
         *********************************************************************-->
    <xsl:template match="datasource[name='WSO2AM_DB']/definition/configuration/url">
       <xsl:copy>
-         <xsl:value-of select="concat(concat(concat(concat(concat(concat('jdbc:mysql://', $sqlhost), ':'), $sqlport), '/'), $apidb), '?autoReconnect=true&amp;relaxAutoCommit=true&amp;UseSSL=false')"/>
+         <xsl:value-of select="concat(concat(concat(concat(concat(concat('jdbc:mysql://', $sqlhost), ':'), $sqlport), '/'), $apidb), '?autoReconnect=true&amp;relaxAutoCommit=true&amp;useSSL=false')"/>
       </xsl:copy>
    </xsl:template>
 
@@ -64,7 +64,7 @@
         *********************************************************************-->
    <xsl:template match="datasource[name='WSO2UM_DB']/definition/configuration/url">
       <xsl:copy>
-         <xsl:value-of select="concat(concat(concat(concat(concat(concat('jdbc:mysql://', $sqlhost), ':'), $sqlport), '/'), $userdb), '?autoReconnect=true&amp;relaxAutoCommit=true&amp;UseSSL=false')"/>
+         <xsl:value-of select="concat(concat(concat(concat(concat(concat('jdbc:mysql://', $sqlhost), ':'), $sqlport), '/'), $userdb), '?autoReconnect=true&amp;relaxAutoCommit=true&amp;useSSL=false')"/>
       </xsl:copy>
    </xsl:template>
 
@@ -74,7 +74,7 @@
         *********************************************************************-->
    <xsl:template match="datasource[name='WSO2REG_DB']/definition/configuration/url">
       <xsl:copy>
-         <xsl:value-of select="concat(concat(concat(concat(concat(concat('jdbc:mysql://', $sqlhost), ':'), $sqlport), '/'), $regdb), '?autoReconnect=true&amp;relaxAutoCommit=true&amp;UseSSL=false')"/>
+         <xsl:value-of select="concat(concat(concat(concat(concat(concat('jdbc:mysql://', $sqlhost), ':'), $sqlport), '/'), $regdb), '?autoReconnect=true&amp;relaxAutoCommit=true&amp;useSSL=false')"/>
       </xsl:copy>
    </xsl:template>
 
@@ -115,7 +115,7 @@
          </jndiConfig>
          <definition type="RDBMS">
             <configuration>
-               <url><xsl:value-of select="concat(concat(concat(concat(concat(concat('jdbc:mysql://', $sqlhost), ':'), $sqlport), '/'), $dbname), '?autoReconnect=true&amp;relaxAutoCommit=true')"/></url>
+               <url><xsl:value-of select="concat(concat(concat(concat(concat(concat('jdbc:mysql://', $sqlhost), ':'), $sqlport), '/'), $dbname), '?autoReconnect=true&amp;relaxAutoCommit=true&amp;useSSL=false')"/></url>
                <username><xsl:value-of select="$dbuser" /></username>
                <password><xsl:value-of select="$dbpassword" /></password>
                <driverClassName><xsl:value-of select="$driver" /></driverClassName>

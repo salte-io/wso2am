@@ -2,7 +2,7 @@
    <xsl:param name="hostname" as="xs:string" required="yes"/>
    <xsl:param name="offset" as="xs:integer" required="yes"/>
    
-   <xsl:output method="xml" indent="yes" />
+   <xsl:output method="xml" encoding="UTF-8" omit-xml-declaration="no" indent="yes" />
    <xsl:template match="node()|@*">
       <xsl:copy>
          <xsl:apply-templates select="node()|@*" />
