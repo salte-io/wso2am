@@ -3,10 +3,11 @@
    <xsl:param name="password" as="xs:string" required="yes"/>
    <xsl:param name="jwtexpiry" as="xs:integer" required="yes"/>
    <xsl:param name="thriftserver" as="xs:string" required="yes"/>
+   <xsl:param name="topicconnectionfactory" as="xs:string" required="yes"/>
    <xsl:param name="sslproxyport" as="xs:integer" required="no"/>
    <xsl:param name="proxyport" as="xs:integer" required="no"/>
 
-   <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" />
+   <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" cdata-section-elements="connectionfactory.TopicConnectionFactory"/>
    <xsl:template match="node()|@*">
       <xsl:copy>
          <xsl:apply-templates select="node()|@*" />
@@ -155,13 +156,9 @@
       </xsl:copy>
    </xsl:template>
 
-   <!-- Disabling this caused strange authentication issues.  While I am looking into the underlying cause I will need to
-        update APIManager/ThrottlingConfiguration/JMSConnectionDetails/JMSConnectionParameters/connectionfactory.TopicConnectionFactory
-        with the following:
-        <![CDATA[amqp://admin!wso2.com!carbon.super:yourpassword@clientid/carbon?brokerlist='tcp://localhost:5682']]> -->
-   <!--xsl:template match="APIManager/ThrottlingConfigurations/EnableAdvanceThrottling">
-      <xsl:copy>false</xsl:copy>
-   </xsl:template-->
+   <xsl:template match="APIManager/ThrottlingConfigurations/JMSConnectionDetails/JMSConnectionParameters/connectionfactory.TopicConnectionFactory">
+      <xsl:copy><xsl:value-of select="$topicconnectionfactory"/></xsl:copy>
+   </xsl:template>
 
    <xsl:template name="ProcessServerURL">
       <xsl:copy>
