@@ -20,6 +20,7 @@ if [ ! -f "/opt/wso2am/repository/conf/initialized" ]; then
   saxonb-xslt -s:/opt/wso2am/repository/conf/registry.xml -xsl:/tmp/registry.xsl -o:/opt/wso2am/repository/conf/registry.xml sqlhost=$DATABASE_HOSTNAME sqlport=$DATABASE_PORT regds=jdbc/WSO2REG_DB regdb=regdb dbuser=$DATABASE_USER
   saxonb-xslt -s:/opt/wso2am/repository/conf/datasources/master-datasources.xml -xsl:/tmp/master-datasources.xsl -o:/opt/wso2am/repository/conf/datasources/master-datasources.xml sqlhost=$DATABASE_HOSTNAME sqlport=$DATABASE_PORT apidb=apimgtdb userdb=userdb userds=jdbc/WSO2UM_DB regdb=regdb regds=jdbc/WSO2REG_DB dbuser=$DATABASE_USER dbpassword=$DATABASE_PASSWORD
   saxonb-xslt -s:/opt/wso2am/repository/conf/tomcat/catalina-server.xml -xsl:/tmp/catalina-server.xsl -o:/opt/wso2am/repository/conf/tomcat/catalina-server.xml password=$PRIVATE_KEY_PASSWORD sslproxyport=$SSL_PROXY_PORT
+  saxonb-xslt -s:/opt/wso2am/repository/conf/data-bridge/data-bridge-config.xml -xsl:/tmp/data-bridge-config.xsl -o:/opt/wso2am/repository/conf/data-bridge/data-bridge-config.xml password=$PRIVATE_KEY_PASSWORD
   rm /tmp/*.xsl
   touch /opt/wso2am/repository/conf/initialized
   if echo $DELAY | egrep -q '^[0-9]+$'; then
