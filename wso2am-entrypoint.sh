@@ -4,6 +4,19 @@ set -eo pipefail
 if [ ! -f "/opt/wso2am/repository/conf/initialized" ]; then
   cd /opt/wso2am/repository/resources/security
 
+  if [ -z "$DATABASE_PASSWORD_FILE" ] && [ -f "$DATABASE_PASSWORD_FILE" ]; then
+    export DATABASE_PASSWORD=$(cat $DATABASE_PASSWORD_FILE)
+  fi
+
+  if [ -z "$PRIVATE_KEY_PASSWORD_FILE" ] && [ -f "$PRIVATE_KEY_PASSWORD_FILE" ]; then
+    export PRIVATE_KEY_PASSWORD=$(cat $PRIVATE_KEY_PASSWORD_FILE)
+  fi
+
+
+  if [ -z "$ADMIN_PASSWORD_FILE" ] && [ -f "$ADMIN_PASSWORD_FILE" ]; then
+    export ADMIN_PASSWORD=$(cat $ADMIN_PASSWORD_FILE)
+  fi
+
   # Prepare Keystore
   openssl pkcs12 -export -in $PUBLIC_CERTIFICATE -inkey $PRIVATE_KEY -out wso2carbon.p12 -name wso2carbon -passout pass:$PRIVATE_KEY_PASSWORD
   keytool -delete -alias wso2carbon -keystore wso2carbon.jks -storepass wso2carbon
@@ -40,14 +53,19 @@ if [ ! -f "/opt/wso2am/repository/conf/initialized" ]; then
     saxonb-xslt -s:/opt/wso2am/repository/conf/tomcat/catalina-server.xml -xsl:/tmp/catalina-server.xsl -o:/opt/wso2am/repository/conf/tomcat/catalina-server.xml password=$PRIVATE_KEY_PASSWORD
   fi
 
-  # Clean-up Configuration File Transformation Scripts
-  rm /tmp/*.xsl
-
   # Indicate Container Initialization Complete
   touch /opt/wso2am/repository/conf/initialized
 
-  # Sleep to give other containers we're dependent upon a chance to complete
-  # their initialization.
+
+  # Clean-up Configuration File Transformation Scripts
+  rm /tmp/*.xsl
+
+  # Clean-up Security-Related Environment Variables
+  unset DATABASE_PASSWORD
+  unset PRIVATE_KEY_PASSWORD
+  unset ADMIN_PASSWORD
+
+  # Sleep to give other containers we're dependent upon a chance to complete their initialization.
   if [ -z "$DELAY" ] && [[ $DELAY =~ ^[0-9]+$ ]]; then
     sleep $DELAY
   fi
