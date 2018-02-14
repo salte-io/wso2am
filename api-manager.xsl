@@ -3,9 +3,8 @@
    <xsl:param name="password" as="xs:string" required="yes"/>
    <xsl:param name="jwtexpiry" as="xs:integer" required="yes"/>
    <xsl:param name="thriftserver" as="xs:string" required="yes"/>
-   <xsl:param name="topicconnectionfactory" as="xs:string" required="yes"/>
-   <xsl:param name="sslproxyport" as="xs:integer" required="no"/>
-   <xsl:param name="proxyport" as="xs:integer" required="no"/>
+   <xsl:param name="sslproxyport" as="xs:integer" required="no">0</xsl:param>
+   <xsl:param name="proxyport" as="xs:integer" required="no">0</xsl:param>
 
    <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" cdata-section-elements="connectionfactory.TopicConnectionFactory"/>
    <xsl:template match="node()|@*">
@@ -154,10 +153,6 @@
             <xsl:otherwise>https://<xsl:value-of select="$hostname"/>:${mgt.transport.https.port}/publisher</xsl:otherwise>
          </xsl:choose>
       </xsl:copy>
-   </xsl:template>
-
-   <xsl:template match="APIManager/ThrottlingConfigurations/JMSConnectionDetails/JMSConnectionParameters/connectionfactory.TopicConnectionFactory">
-      <xsl:copy><xsl:value-of select="$topicconnectionfactory"/></xsl:copy>
    </xsl:template>
 
    <xsl:template name="ProcessServerURL">
