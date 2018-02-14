@@ -55,8 +55,8 @@ if [ ! -f "/opt/wso2am/repository/conf/initialized" ]; then
 
   sed -i "s/\${jms.username}/admin\!wso2.com\!carbon.super/g" /opt/wso2am/repository/conf/api-manager.xml
   sed -i "s/\${jms.password}/$ADMIN_PASSWORD/g" /opt/wso2am/repository/conf/api-manager.xml
-  sed -i "s/\${jms.url}/tcp:\/\/localhost:\${jms.port}/g" /opt/wso2am/repository/conf/api-manager.xml
-  sed -i "s/\${carbon.local.ip}/localhost/g" /opt/wso2am/repository/conf/api-manager.xml
+  sed -i "s/\${jms.url}/tcp:\/\/\${carbon.local.ip}:\${jms.port}/g" /opt/wso2am/repository/conf/api-manager.xml
+  # sed -i "s/\${carbon.local.ip}/localhost/g" /opt/wso2am/repository/conf/api-manager.xml
   sed -i "s/\${admin.username}/admin@wso2.com@carbon.super/g" /opt/wso2am/repository/conf/api-manager.xml
 
   # Indicate Container Initialization Complete
