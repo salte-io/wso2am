@@ -57,7 +57,7 @@ if [ ! -f "/opt/wso2am/repository/conf/initialized" ]; then
   sed -i "s/\${jms.password}/$ADMIN_PASSWORD/g" /opt/wso2am/repository/conf/api-manager.xml
   sed -i "s/\${jms.url}/tcp:\/\/\${carbon.local.ip}:\${jms.port}/g" /opt/wso2am/repository/conf/api-manager.xml
   # sed -i "s/\${carbon.local.ip}/localhost/g" /opt/wso2am/repository/conf/api-manager.xml
-  sed -i "s/\${admin.username}/admin@wso2.com@carbon.super/g" /opt/wso2am/repository/conf/api-manager.xml
+  # sed -i "s/\${admin.username}/admin@wso2.com@carbon.super/g" /opt/wso2am/repository/conf/api-manager.xml
 
   # Indicate Container Initialization Complete
   touch /opt/wso2am/repository/conf/initialized
@@ -71,7 +71,7 @@ if [ ! -f "/opt/wso2am/repository/conf/initialized" ]; then
   unset ADMIN_PASSWORD
 
   # Sleep to give other containers we're dependent upon a chance to complete their initialization.
-  if [ -z "$DELAY" ] && [[ $DELAY =~ ^[0-9]+$ ]]; then
+  if [ ! -z "$DELAY" ] && [[ $DELAY =~ ^[0-9]+$ ]]; then
     sleep $DELAY
   fi
 fi
