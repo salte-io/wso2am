@@ -18,6 +18,22 @@
       <xsl:copy><xsl:value-of select="$password"/></xsl:copy>
    </xsl:template>
 
+   <xsl:template match="ThrottlingConfigurations/DataPublisher/ReceiverUrlGroup">
+      <xsl:copy>tcp://localhost:${receiver.url.port}</xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="ThrottlingConfigurations/DataPublisher/AuthUrlGroup">
+      <xsl:copy>ssl://localhost:${auth.url.port}</xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="ThrottlingConfigurations/JMSConnectionDetails/ServiceURL">
+      <xsl:copy>tcp://localhost:${jms.port}</xsl:copy>
+   </xsl:template>
+
+   <!--xsl:template match="EnableAdvanceThrottling">
+      <xsl:copy>false</xsl:copy>
+   </xsl:template-->
+
    <xsl:template match="APIManager/APIKeyValidator">
       <xsl:copy>
          <xsl:apply-templates />

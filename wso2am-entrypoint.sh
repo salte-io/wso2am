@@ -48,7 +48,9 @@ if [ ! -f "$REPOSITORY_ROOT/conf/initialized" ]; then
   saxonb-xslt -s:$CONFIGURATION_ROOT/datasources/master-datasources.xml -xsl:/tmp/master-datasources.xsl -o:$CONFIGURATION_ROOT/datasources/master-datasources.xml sqlhost=$DATABASE_HOSTNAME sqlport=$DATABASE_PORT apidb=apimgtdb userdb=userdb userds=jdbc/WSO2UM_DB regdb=regdb regds=jdbc/WSO2REG_DB dbuser=$DATABASE_USER dbpassword=$DATABASE_PASSWORD
   saxonb-xslt -s:$CONFIGURATION_ROOT/data-bridge/data-bridge-config.xml -xsl:/tmp/data-bridge-config.xsl -o:$CONFIGURATION_ROOT/data-bridge/data-bridge-config.xml password=$PRIVATE_KEY_PASSWORD keystore=$KEYSTORE_ROOT/$KEYSTORE_FILENAME
 
-  TOPIC_CONNECTION_FACTORY="amqp://admin!wso2.com!carbon.super:$ADMIN_PASSWORD@clientid/carbon?brokerlist='tcp://localhost:${jms.port}'"
+  set +H
+  TOPIC_CONNECTION_FACTORY="amqp://admin!wso2.com!carbon.super:\${jms.password}@clientid/carbon?brokerlist='\${jms.url}'"
+  set -H
   if [ ! -z "$PROXY_PORT" ] && ! [[ $PROXY_PORT =~ ^[0-9]+$ ]]; then
     echo "When specified, PROXY_PORT must be numeric."
     exit 1
@@ -62,6 +64,10 @@ if [ ! -f "$REPOSITORY_ROOT/conf/initialized" ]; then
     saxonb-xslt -s:$CONFIGURATION_ROOT/api-manager.xml -xsl:/tmp/api-manager.xsl -o:$CONFIGURATION_ROOT/api-manager.xml hostname=$EXTERNAL_HOSTNAME password=$PRIVATE_KEY_PASSWORD jwtexpiry=$JWT_EXPIRY thriftserver=localhost topicconnectionfactory=$TOPIC_CONNECTION_FACTORY
     saxonb-xslt -s:$CONFIGURATION_ROOT/tomcat/catalina-server.xml -xsl:/tmp/catalina-server.xsl -o:$CONFIGURATION_ROOT/tomcat/catalina-server.xml password=$PRIVATE_KEY_PASSWORD
   fi
+
+  sed -i "s/admin:admin/admin%40wso2.com%40carbon.super:$ADMIN_PASSWORD/g" $CONFIGURATION_ROOT/jndi.properties
+  sed -i "s/\${admin.password}/$ADMIN_PASSWORD/g" $CONFIGURATION_ROOT/api-manager.xml
+  sed -i "s/\${admin.username}/admin@wso2.com@carbon.super/g" $CONFIGURATION_ROOT/api-manager.xml
 
   # Indicate Container Initialization Complete
   touch /opt/wso2am/repository/conf/initialized
