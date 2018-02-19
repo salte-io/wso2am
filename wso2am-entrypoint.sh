@@ -65,10 +65,6 @@ if [ ! -f "$REPOSITORY_ROOT/conf/initialized" ]; then
     saxonb-xslt -s:$CONFIGURATION_ROOT/tomcat/catalina-server.xml -xsl:/tmp/catalina-server.xsl -o:$CONFIGURATION_ROOT/tomcat/catalina-server.xml password=$PRIVATE_KEY_PASSWORD
   fi
 
-  sed -i "s/admin:admin/admin%40wso2.com%40carbon.super:$ADMIN_PASSWORD/g" $CONFIGURATION_ROOT/jndi.properties
-  sed -i "s/\${admin.password}/$ADMIN_PASSWORD/g" $CONFIGURATION_ROOT/api-manager.xml
-  sed -i "s/\${admin.username}/admin@wso2.com@carbon.super/g" $CONFIGURATION_ROOT/api-manager.xml
-
   # Indicate Container Initialization Complete
   touch /opt/wso2am/repository/conf/initialized
 
