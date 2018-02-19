@@ -30,10 +30,6 @@
       <xsl:copy>tcp://localhost:${jms.port}</xsl:copy>
    </xsl:template>
 
-   <!--xsl:template match="EnableAdvanceThrottling">
-      <xsl:copy>false</xsl:copy>
-   </xsl:template-->
-
    <xsl:template match="APIManager/APIKeyValidator">
       <xsl:copy>
          <xsl:apply-templates />
