@@ -4,8 +4,8 @@
    <xsl:param name="jwtexpiry" as="xs:integer" required="yes"/>
    <xsl:param name="thriftserver" as="xs:string" required="yes"/>
    <xsl:param name="topicconnectionfactory" as="xs:string" required="yes"/>
-   <xsl:param name="sslproxyport" as="xs:integer" required="no"/>
-   <xsl:param name="proxyport" as="xs:integer" required="no"/>
+   <xsl:param name="sslproxyport" as="xs:integer" required="no">0</xsl:param>
+   <xsl:param name="proxyport" as="xs:integer" required="no">0</xsl:param>
 
    <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" cdata-section-elements="connectionfactory.TopicConnectionFactory"/>
    <xsl:template match="node()|@*">
@@ -16,6 +16,18 @@
 
    <xsl:template match="Password">
       <xsl:copy><xsl:value-of select="$password"/></xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="ThrottlingConfigurations/DataPublisher/ReceiverUrlGroup">
+      <xsl:copy>tcp://localhost:${receiver.url.port}</xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="ThrottlingConfigurations/DataPublisher/AuthUrlGroup">
+      <xsl:copy>ssl://localhost:${auth.url.port}</xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="ThrottlingConfigurations/JMSConnectionDetails/ServiceURL">
+      <xsl:copy>tcp://localhost:${jms.port}</xsl:copy>
    </xsl:template>
 
    <xsl:template match="APIManager/APIKeyValidator">
@@ -156,7 +168,7 @@
       </xsl:copy>
    </xsl:template>
 
-   <xsl:template match="APIManager/ThrottlingConfigurations/JMSConnectionDetails/JMSConnectionParameters/connectionfactory.TopicConnectionFactory">
+  <xsl:template match="APIManager/ThrottlingConfigurations/JMSConnectionDetails/JMSConnectionParameters/connectionfactory.TopicConnectionFactory">
       <xsl:copy><xsl:value-of select="$topicconnectionfactory"/></xsl:copy>
    </xsl:template>
 

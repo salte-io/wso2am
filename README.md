@@ -1,24 +1,53 @@
 # WSO2 API Manager
-Defines a WSO2 API Manager platform docker image that enables the consumer to override the most commonly overridden aspects of the default platform configuration.
+## Overview
+This WSO2 API Manager docker image overrides the following configurations:
+* Overriddes external references to localhost with a legitimate hostname.
+* Overrides the WSO2 self-signed certificate with a legitimate SSL certificate.
+* Overrides the default SSL private key password with the provided password.
+* Overrides the use of the local H2 database with an external MySQL database.
+* Configures login by email address.
+* Configures the platform to pass a JWT containing the authenticated user's profile information to the back-end service when an API is called.
 
 ## How to Use
-1. Run the cooresponding database container available on [Docker Hub](https://hub.docker.com/r/salte/mysql-wso2am/).
+1. Run the corresponding database container available on [Docker Hub](https://hub.docker.com/r/salte/mysql-wso2am/).
 2. Run the image counterpart of this manifest available on [Docker Hub](https://hub.docker.com/r/salte/wso2am/) via the following command:
 ```
-$ docker run --name=wso2am --restart=always --detach \
-                --volume=<host volume>:<container volume> \
-                --publish=9443:9443 \
-                --publish=9763:9763 \
-                --publish=8243:8243 \
-                --publish=8280:8280 \
-                -e EXTERNAL_HOSTNAME=<DNS Hostname> \
-                -e DATABASE_HOSTNAME=<DNS Hostname> \
-                -e DATABASE_PORT=<port number> \
-                -e DATABASE_USER=<username> \
-                -e DATABASE_PASSWORD=<password> \
-                -e PUBLIC_CERTIFICATE=<public certificate file> \
-                -e PRIVATE_KEY=<private key file> \
-                -e PRIVATE_KEY_PASSWORD=<password> \
-                -e ADMIN_PASSWORD=<password> wso2am:<tag>
+$ docker run --name wso2am --restart=always --detach \
+             --publish=9443:9443 \
+             --publish=9763:9763 \
+             --publish=8280:8280 \
+             --publish=8243:8243 \
+             --volume=<host certificate location>:<container certificate location> \
+             -e EXTERNAL_HOSTNAME=<DNS Hostname> \
+             -e ADMIN_PASSWORD=<password> \
+             -e DATABASE_HOSTNAME=<DNS Hostname> \
+             -e DATABASE_PORT=<port number> \
+             -e DATABASE_USER=<username> \
+             -e DATABASE_PASSWORD=<password> \
+             -e CA_CERTIFICATE_BUNDLE=<container certificate location and CA certificates filename> \
+             -e PUBLIC_CERTIFICATE=<container certificate location and public certificate filename> \
+             -e PRIVATE_KEY=<container certificate location and private key filename> \
+             -e PRIVATE_KEY_PASSWORD=<password> \
+             -e JWT_EXPIRY=<number of minutes> \
+             wso2am:<tag>
 ```
-In the example above, "host volume" is the location on disk where the consumer is placing both the "public certificate file" and the "private key file" that will be used to secure https communications.  In addition, "container volume" is where the "host volume" will be mounted inside of the container, thus making the aforementioned "public certificate file" and "private key file" available to the container's initialization process.  The value provided for "public certificate file" and "private key file" should incorporate this path within their respective values.
+
+## Supported Environment Variables
+Name | Description | Required
+---- | ----------- | --------
+EXTERNAL_HOSTNAME | This is the hostname that API consumers will use to call WSO2.  It should match at least one of the subject alternate names in the certificate used to secure HTTPS communications. | Yes
+ADMIN_PASSWORD | This is the password to be assigned to the default admin superuser (i.e. admin@wso2.com). | Yes
+DATABASE_HOSTNAME | This hostname (or IP address) should point to a database server hosting the three databases required by the WSO2 API Manager.  They are: apimgtdb, regdb, userdb. If these databases are empty then WSO2 will initialize them.  The DATABASE_PORT, DATABASE_USER, and DATABASE_PASSWORD environment variables are also required to connect to these databases. | Yes
+DATABASE_PORT | See DATABASE_HOSTNAME description. | Yes
+DATABASE_USER | See DATABASE_HOSTNAME description. | Yes
+DATABASE_PASSWORD | See DATABASE_HOSTNAME description. | Yes
+CA_CERTIFICATE_BUNDLE | This is the path and filename to the certificate authority certificate bundle associated with the aforementioned PUBLIC_CERTIFICATE.  See the PUBLIC_CERTIFICATE environment variable description for more information. | Yes
+PUBLIC CERTIFICATE | This is path and filename to the public certificate used to secure HTTPS communications.  The location provided should correspond to a location inside of the running container.  This may be achieved by mounting a host volume containing this certificate to a location inside of the container. | Yes
+PRIVATE_KEY | This is the path and filename to the private key used to secure HTTPS communications.  It should correspond to the PUBLIC_CERTIFICATE provided.  See the PUBLIC_CERTIFICATE environment variable description for more information. | Yes
+PRIVATE_KEY_PASSWORD | This is the password that will be used to secure access to the PRIVATE_KEY once it is stored inside of the WSO2 Java keystore. | Yes
+JWT_EXPIRY | This determines how many minutes from issuance before the JWT tokens generated by the platform expire. | Yes
+SSL_PROXY_PORT | If this WSO2 instance will be fronted by a reverse proxy, such as NGINX then the proxy exposed by the reverse proxy for HTTPS communications should be passed into the container using this environment variable. | No
+PROXY_PORT | If this WSO2 instance will be fronted by a reverse proxy, such as NGINX then the proxy exposed by the reverse proxy for HTTP communications should be passed into the container using this environment variable. | No
+DELAY | This is how long the container should wait in seconds before launching the API manager platform the first time it starts.  This comes in handy when you are launching the corresponding database container alongside this container via docker-compose or docker stack deploy. | No
+
+*Note:  If this container is being run in Docker Swarm then Docker Secrets may be used to provide the ADMIN_PASSWORD, DATABASE_PASSWORD, and PRIVATE_KEY_PASSWORD.  To accomplish this, you simply pass the corresponding environment variable with "_FILE" appended to its name and its value set equal to the path and filename of the corresponding secret.  For example, ADMIN_PASSWORD_FILE=/run/secrets/ADMIN_PASSWORD.*
