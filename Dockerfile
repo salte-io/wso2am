@@ -1,9 +1,9 @@
-FROM java:7-jdk
+FROM java:8-jdk
 
 ###############################################################################
 # Steps
-# 1) Downloads version 2.0.0 of the WSO2 API Manager platform.
-# 2) Downloads version 5.1.38 of the MySql database driver.
+# 1) Downloads version 2.1.0 of the WSO2 API Manager platform.
+# 2) Downloads version 5.1.45 of the MySql database driver.
 # 3) Installs the zip command line tool.
 # 4) Installs the Saxon XSL command line tool.
 # 5) Installs the OpenSSL command line tool.
@@ -14,18 +14,18 @@ FROM java:7-jdk
 ###############################################################################
 # Bypass NGINX because of platform.zip filesize.
 ###############################################################################
-RUN wget --no-check-certificate -P /opt https://nexus.salte.io:8443/repository/wso2/api/2.0.0/platform.zip && \
-    wget -P /tmp http://dev.mysql.com/Downloads/Connector-J/mysql-connector-java-5.1.38.zip && \
+RUN wget --no-check-certificate -P /opt https://nexus.salte.io:8443/repository/wso2/api/2.1.0/platform.zip && \
+    wget -P /tmp https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.45.zip && \
     apt-get update && \
     apt-get install -y zip && \
     apt-get install -y libsaxonb-java && \
     apt-get install -y openssl && \
     apt-get clean && \
     unzip /opt/platform.zip -d /opt && \
-    mv /opt/wso2am-2.0.0 /opt/wso2am && \
+    mv /opt/wso2am-2.1.0 /opt/wso2am && \
     rm /opt/platform.zip && \
-    unzip /tmp/mysql-connector-java-5.1.38.zip -d /tmp && \
-    cp /tmp/mysql-connector-java-5.1.38/*.jar /opt/wso2am/repository/components/lib/. && \
+    unzip /tmp/mysql-connector-java-5.1.45.zip -d /tmp && \
+    cp /tmp/mysql-connector-java-5.1.45/*.jar /opt/wso2am/repository/components/lib/. && \
     rm -r /tmp/mysql* && \
     ln -sf /dev/stdout /opt/wso2am/repository/logs/wso2carbon.log
 
