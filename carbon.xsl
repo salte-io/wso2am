@@ -3,7 +3,6 @@
    <xsl:param name="password" as="xs:string" required="yes"/>
    <xsl:param name="keystore" as="xs:string" required="yes"/>
    <xsl:param name="alias" as="xs:string" required="yes"/>
-   <xsl:param name="offset" as="xs:integer" required="yes"/>
 
    <xsl:output method="xml" encoding="ISO-8859-1" omit-xml-declaration="no" indent="yes" />
    <xsl:template match="node()|@*">
@@ -53,9 +52,5 @@
 
    <xsl:template match="carbon:Server/carbon:Axis2Config/carbon:HideAdminServiceWSDLs">
       <xsl:copy>false</xsl:copy>
-   </xsl:template>
-
-   <xsl:template match="carbon:Server/carbon:Ports/carbon:Offset">
-      <xsl:copy><xsl:value-of select="$offset"/></xsl:copy>
    </xsl:template>
 </xsl:stylesheet>

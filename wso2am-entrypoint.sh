@@ -14,16 +14,16 @@ if [ ! -f "$REPOSITORY_ROOT/conf/initialized" ]; then
   cd $KEYSTORE_ROOT
 
   if [ ! -z "$DATABASE_PASSWORD_FILE" ] && [ -f "$DATABASE_PASSWORD_FILE" ]; then
-    export DATABASE_PASSWORD=$(cat $DATABASE_PASSWORD_FILE)
+    DATABASE_PASSWORD=$(cat $DATABASE_PASSWORD_FILE)
   fi
 
   if [ ! -z "$PRIVATE_KEY_PASSWORD_FILE" ] && [ -f "$PRIVATE_KEY_PASSWORD_FILE" ]; then
-    export PRIVATE_KEY_PASSWORD=$(cat $PRIVATE_KEY_PASSWORD_FILE)
+    PRIVATE_KEY_PASSWORD=$(cat $PRIVATE_KEY_PASSWORD_FILE)
   fi
 
 
   if [ ! -z "$ADMIN_PASSWORD_FILE" ] && [ -f "$ADMIN_PASSWORD_FILE" ]; then
-    export ADMIN_PASSWORD=$(cat $ADMIN_PASSWORD_FILE)
+    ADMIN_PASSWORD=$(cat $ADMIN_PASSWORD_FILE)
   fi
 
   # Prepare Keystore
@@ -41,8 +41,8 @@ if [ ! -f "$REPOSITORY_ROOT/conf/initialized" ]; then
   
   # Update Configuration Files
   saxonb-xslt -s:$CONFIGURATION_ROOT/axis2/axis2.xml -xsl:/tmp/axis2.xsl -o:$CONFIGURATION_ROOT/axis2/axis2.xml password=$PRIVATE_KEY_PASSWORD keystore=$KEYSTORE_ROOT/$KEYSTORE_FILENAME
-  saxonb-xslt -s:$CONFIGURATION_ROOT/carbon.xml -xsl:/tmp/carbon.xsl -o:$CONFIGURATION_ROOT/carbon.xml hostname=$EXTERNAL_HOSTNAME password=$PRIVATE_KEY_PASSWORD keystore=$KEYSTORE_ROOT/$KEYSTORE_FILENAME alias=wso2carbon offset=$OFFSET
-  saxonb-xslt -s:$CONFIGURATION_ROOT/identity/identity.xml -xsl:/tmp/identity.xsl -o:$CONFIGURATION_ROOT/identity/identity.xml hostname=$EXTERNAL_HOSTNAME offset=$OFFSET
+  saxonb-xslt -s:$CONFIGURATION_ROOT/carbon.xml -xsl:/tmp/carbon.xsl -o:$CONFIGURATION_ROOT/carbon.xml hostname=$EXTERNAL_HOSTNAME password=$PRIVATE_KEY_PASSWORD keystore=$KEYSTORE_ROOT/$KEYSTORE_FILENAME alias=$KEYSTORE_ENTRY
+  saxonb-xslt -s:$CONFIGURATION_ROOT/identity/identity.xml -xsl:/tmp/identity.xsl -o:$CONFIGURATION_ROOT/identity/identity.xml hostname=$EXTERNAL_HOSTNAME
   saxonb-xslt -s:$CONFIGURATION_ROOT/user-mgt.xml -xsl:/tmp/user-mgt.xsl -o:$CONFIGURATION_ROOT/user-mgt.xml userds=jdbc/WSO2UM_DB password=$ADMIN_PASSWORD
   saxonb-xslt -s:$CONFIGURATION_ROOT/registry.xml -xsl:/tmp/registry.xsl -o:$CONFIGURATION_ROOT/registry.xml sqlhost=$DATABASE_HOSTNAME sqlport=$DATABASE_PORT regds=jdbc/WSO2REG_DB regdb=regdb dbuser=$DATABASE_USER
   saxonb-xslt -s:$CONFIGURATION_ROOT/datasources/master-datasources.xml -xsl:/tmp/master-datasources.xsl -o:$CONFIGURATION_ROOT/datasources/master-datasources.xml sqlhost=$DATABASE_HOSTNAME sqlport=$DATABASE_PORT apidb=apimgtdb userdb=userdb userds=jdbc/WSO2UM_DB regdb=regdb regds=jdbc/WSO2REG_DB dbuser=$DATABASE_USER dbpassword=$DATABASE_PASSWORD
